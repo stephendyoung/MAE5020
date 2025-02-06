@@ -36,11 +36,21 @@ print("np.diag(S)     :", S.shape)
 
 
 
-S_full = np.linalg.svd(X, compute_uv=False)  
-InfRetained = np.cumsum(S_full**2) / np.sum(S_full**2)
-print(InfRetained)
-k_90 = np.searchsorted(InfRetained, 0.90) + 1
-print(f"Rank needed to retain 90% of information: {k_90}")
+
+
+plt.figure(1)
+plt.plot(np.cumsum(np.diag(S))/np.sum(np.diag(S)))
+plt.axvline(443, color='red', linestyle='dashed')
+plt.axhline(0.90,color='black', linestyle='dashed')
+plt.title('Singular Values: Cumulative Sum')
+plt.xlim(0,1000)
+plt.show()
+
+
+
+
+
+
 
 
 # j = 0
@@ -66,7 +76,32 @@ print(f"Rank needed to retain 90% of information: {k_90}")
 
 r = 17
 Ur = U[:, :r]
-UTransposeCheck = Ur @ np.transpose(Ur)
-print(f"U*U^T is rxr check: {Ur @ Ur.T}")
+UTUTransposeCheck = Ur @ np.transpose(Ur)
+print(f"U*U^T is rxr check: {UTUTransposeCheck.shape}")
+
+
+r = 17
+Ur = U[:, :r]
+UTUTransposeCheck =np.transpose(Ur) @ Ur 
+print(f"U^T*U is not rxr check: {UTUTransposeCheck.shape}")
+
+
+n = X.shape[1]
+i = 0
+j=0
+
+error = np.zeros((n,n))
+for i in range(1, n+1):
+    identityMat = np.eye(i)
+    # Ur = U[:,:i]
+    # UUT = np.transpose(Ur) @ Ur
+    
+print(n)
+print(error)
+plt.plot(error.T)
+plt.xlabel("rank")
+plt.ylabel("error")
+
+
 
 
